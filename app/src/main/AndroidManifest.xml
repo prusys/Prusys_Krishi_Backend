@@ -15,9 +15,6 @@
         android:theme="@style/Theme.PrudentKrishi"
         tools:targetApi="31">
         <activity
-            android:name=".TempDetails"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
