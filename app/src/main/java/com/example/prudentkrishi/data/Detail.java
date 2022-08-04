@@ -4,6 +4,7 @@ public class Detail {
     private String det1;
 
 
+
     public Detail(String det1) {
         this.det1 = det1;
 

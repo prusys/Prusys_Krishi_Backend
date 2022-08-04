@@ -8,6 +8,12 @@
     android:layout_marginTop="40dp"
     tools:context=".MainActivity">
 
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/list_frag"
+        tools:layout="@layout/myfragment"
+        android:name="com.example.prudentkrishi.MyFragment"/>
 
 
 

@@ -35,4 +35,5 @@ public class DetailAdapter extends ArrayAdapter<Detail> {
 
         return view;
     }
+
 }
