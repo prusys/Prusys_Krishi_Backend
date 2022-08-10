@@ -11,14 +11,14 @@ package com.example.prudentkrishi;
 
 
 import android.annotation.SuppressLint;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
@@ -50,20 +50,7 @@ public class MqttActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setLogo(getDrawable(R.drawable.mqtt_icon));
-        }
-        /////////////////////////////////////////////////////////////////
-        brokerAddress = findViewById(R.id.broker_address);
-        textToSend = findViewById(R.id.text_to_send);
-        topicToSend = findViewById(R.id.topic_to_send);
-        subscriptionTopic = findViewById(R.id.subscription_topic);
-        subscribeButton = findViewById(R.id.subscribe_button);
-        connectButton = findViewById(R.id.connect_to_broker_button);
-        sendButton = findViewById(R.id.send_button);
-        receivedMessage = findViewById(R.id.received_message);
-        connectionStatus = findViewById(R.id.connection_status);
+
         /////////////////////////////////////////////////////////////////
         connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +59,7 @@ public class MqttActivity extends AppCompatActivity {
                 connectToBroker();
             }
         });
-        /////////////////////////////////////////////////////////////////
+
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
