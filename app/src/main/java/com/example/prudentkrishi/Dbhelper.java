@@ -1,12 +1,23 @@
 package com.example.prudentkrishi;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
+
+import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttCallback;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class Dbhelper extends SQLiteOpenHelper {
-
+Context context;
     private static final String TABLE_NAME="REPORT";
     private static final int DB_VERSION = 1;
     private static final String COL1="Date";
@@ -32,6 +43,18 @@ public class Dbhelper extends SQLiteOpenHelper {
     private static final String COL21="Soil_temp";
     private static final String COL22="Leaf";
     private static final String COL23="UV";
+    MqttAndroidClient client;
+
+    String serverURL = "tcp://broker.hivemq.com:1883";
+    String topic = "mqtt/topic";
+    String sTopic = "mqtt/sensorData";
+
+    boolean connectionFlag = false;
+    serverURL = "tcp://";
+    connectToBroker();
+
+
+
 
     public Dbhelper(Context context){
         super(context,TABLE_NAME,null,DB_VERSION);
@@ -48,6 +71,81 @@ public class Dbhelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
         onCreate(db);
 
+    }
+    void connectToBroker() {
+        String clientId = MqttClient.generateClientId();
+        client = new MqttAndroidClient( void connectToBroker() {
+            String clientId = MqttClient.generateClientId();
+            client = new MqttAndroidClient(context, serverURL, clientId);
+
+            try {
+                IMqttToken token = client.connect();
+                token.setActionCallback(new IMqttActionListener() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onSuccess(IMqttToken asyncActionToken) {
+                        connectionStatus.setText("Connected To " + serverURL);
+                        connectionFlag = true;
+                        sendButton.setEnabled(true);
+                        subscribeButton.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                        Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
+        }getApplicationContext(), serverURL, clientId);
+
+        try {
+            IMqttToken token = client.connect();
+            token.setActionCallback(new IMqttActionListener() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    connectionStatus.setText("Connected To " + serverURL);
+                    connectionFlag = true;
+                    sendButton.setEnabled(true);
+                    subscribeButton.setEnabled(true);
+                }
+
+                @Override
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    Toast.makeText(getApplicationContext(), "Failed", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+    public void subscribeToTopic(String topic) {
+        try {
+            if (client.isConnected()) {
+                client.subscribe(topic, 0);
+                Toast.makeText(context, "Subscribed", Toast.LENGTH_SHORT).show();
+                client.setCallback(new MqttCallback() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void connectionLost(Throwable cause) {
+                        connectionStatus.setText("Connection Failed");
+                        connectionFlag = false;
+                    }
+
+                    @Override
+                    public void messageArrived(String topic, MqttMessage message) throws Exception {
+                        receivedMessage.setText(message.toString());
+                    }
+
+                    @Override
+                    public void deliveryComplete(IMqttDeliveryToken token) {
+                    }
+                });
+            }
+        } catch (Exception ignored) {
+        }
     }
 
 }

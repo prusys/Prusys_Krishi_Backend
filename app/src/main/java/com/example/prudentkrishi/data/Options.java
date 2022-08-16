@@ -5,9 +5,12 @@ import android.util.Log;
 import org.eclipse.paho.android.service.MqttAndroidClient;
 import org.eclipse.paho.client.mqttv3.IMqttActionListener;
 import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttSecurityException;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 public class Options {
@@ -35,7 +38,9 @@ public class Options {
             }
         });
     }
-    tring clientId = MqttClient.generateClientId();
+
+    private MqttAsyncClient MqttClient;
+    String clientId = MqttClient.generateClientId();
     final MqttAndroidClient client =
             new MqttAndroidClient(this.getApplicationContext(), "ssl://iot.eclipse.org:8883",
                     clientId);
@@ -45,7 +50,11 @@ try {
         InputStream input =
                 this.getApplicationContext().getAssets().open("iot.eclipse.org.bks");
 
-        options.setSocketFactory(client.getSSLSocketFactory(input, "eclipse-password"));
+        try {
+            options.setSocketFactory(client.getSSLSocketFactory(input, "eclipse-password"));
+        } catch (MqttSecurityException ex) {
+            ex.printStackTrace();
+        }
 
 
         IMqttToken token = client.connect(options);
@@ -66,7 +75,7 @@ try {
         });
 
 
-    } catch (MqttException | IOException e) {
+    } catch (MqttException IOException_e) {
         e.printStackTrace();
     }
     }
