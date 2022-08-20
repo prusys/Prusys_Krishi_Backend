@@ -17,7 +17,11 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class Dbhelper extends SQLiteOpenHelper {
-Context context;
+    String serverURL = "tcp://broker.hivemq.com:1883";
+    String topic = "mqtt/topic";
+    String sTopic = "mqtt/sensorData";
+
+    Context context;
     private static final String TABLE_NAME="REPORT";
     private static final int DB_VERSION = 1;
     private static final String COL1="Date";

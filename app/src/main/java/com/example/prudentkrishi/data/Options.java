@@ -16,8 +16,8 @@ import java.io.InputStream;
 public class Options {
     final String topic = "foo/bar";
 {
-        MqttAndroidClient client = null;
-        IMqttToken unsubToken = null;
+           MqttAndroidClient client = null;
+           IMqttToken unsubToken = null;
         try {
             unsubToken = client.unsubscribe(topic);
         } catch (MqttException ex) {
@@ -40,21 +40,11 @@ public class Options {
     }
 
     private MqttAsyncClient MqttClient;
-    String clientId = MqttClient.generateClientId();
+    String clientId = MqttAsyncClient.generateClientId();
     final MqttAndroidClient client =
             new MqttAndroidClient(this.getApplicationContext(), "ssl://iot.eclipse.org:8883",
                     clientId);
-try {
-        MqttConnectOptions options = new MqttConnectOptions();
 
-        InputStream input =
-                this.getApplicationContext().getAssets().open("iot.eclipse.org.bks");
-
-        try {
-            options.setSocketFactory(client.getSSLSocketFactory(input, "eclipse-password"));
-        } catch (MqttSecurityException ex) {
-            ex.printStackTrace();
-        }
 
 
         IMqttToken token = client.connect(options);

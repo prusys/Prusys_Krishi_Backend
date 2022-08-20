@@ -84,4 +84,29 @@ startActivity(intent);
             e.printStackTrace();
         }
     }
-}
+    public void subscribeToTopic(String topic) {
+        try {
+            if (client.isConnected()) {
+                client.subscribe(topic, 0);
+                Toast.makeText(getApplicationContext(), "Subscribed", Toast.LENGTH_SHORT).show();
+                client.setCallback(new MqttCallback() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void connectionLost(Throwable cause) {
+                        connectionStatus.setText("Connection Failed");
+                        connectionFlag = false;
+                    }
+
+                    @Override
+                    public void messageArrived(String topic, MqttMessage message) throws Exception {
+                        receivedMessage.setText(message.toString());
+                    }
+
+                    @Override
+                    public void deliveryComplete(IMqttDeliveryToken token) {
+                    }
+                });
+            }
+        } catch (Exception ignored) {
+        }
+}}

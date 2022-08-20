@@ -9,12 +9,11 @@
     tools:context=".MainActivity">
 
     <fragment
+        android:id="@+id/list_frag"
+        android:name="com.example.prudentkrishi.MyFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/list_frag"
-        tools:layout="@layout/myfragment"
-        android:name="com.example.prudentkrishi.MyFragment"/>
-
+        tools:layout="@layout/myfragment" />
 
 
 </FrameLayout>
